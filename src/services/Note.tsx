@@ -1,6 +1,6 @@
 import { getNowYMD } from "../utils/Time"
 
-export const createNoteArr = (data: any) => {
+export const convertNoteObjectToArray = (data: any) => {
   const count = Object.keys(data).length
   const arr = new Array(count)
   for (let i = 0; i < count; i++) {
@@ -17,7 +17,7 @@ export const createNoteArr = (data: any) => {
   return arr
 }
 
-export const deletedData = (item: any, data: any) => {
+export const recreateNoteWithDeleteingRow = (item: any, data: any) => {
   const beforeRow = item.beforeId
     ? {
         [item.beforeId]: {
@@ -43,7 +43,11 @@ export const deletedData = (item: any, data: any) => {
   }
 }
 
-export const createdData = (data: any, item: any, newId: number) => {
+export const recreateNoteWithAddingRow = (
+  data: any,
+  item: any,
+  newId: number
+) => {
   const currentRowAfterId = item.afterId
   // 1. 現在行の下に新規行が作成される
   // afterIdを新規のidに変更

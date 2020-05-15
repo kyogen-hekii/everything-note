@@ -1,4 +1,7 @@
-import { createdData, deletedData } from "../services/Note"
+import {
+  recreateNoteWithAddingRow,
+  recreateNoteWithDeleteingRow,
+} from "../services/Note"
 
 // const getFirstLineId = (lines: any) => {
 //   const firstLine: any = Object.values(lines).filter((obj: any) => {
@@ -56,12 +59,16 @@ describe("test: ", () => {
     expect(lastLineId).toBe(3)
   })
   const addedLineId = lastLineId + 1
-  const linesAfterAdded = createdData(lines, lines[firstLineId], addedLineId)
+  const linesAfterAdded = recreateNoteWithAddingRow(
+    lines,
+    lines[firstLineId],
+    addedLineId
+  )
   it("created newLine to 2", () => {
     expect(linesAfterAdded[addedLineId].beforeId).toBe(2)
     expect(linesAfterAdded[addedLineId].afterId).toBe(1)
   })
-  const linesAfterDeleted = deletedData(
+  const linesAfterDeleted = recreateNoteWithDeleteingRow(
     linesAfterAdded[firstLineId],
     linesAfterAdded
   )

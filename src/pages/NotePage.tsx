@@ -1,7 +1,11 @@
 import React, { Component } from "react"
 import { createSelector } from "reselect"
 import _ from "lodash"
-import { createNoteArr, createdData, deletedData } from "../services/Note"
+import {
+  convertNoteObjectToArray,
+  recreateNoteWithAddingRow,
+  recreateNoteWithDeleteingRow,
+} from "../services/Note"
 import { getNowYMD } from "../utils/Time"
 
 const selfReactions = {
@@ -38,7 +42,7 @@ export default class NotePage extends Component {
           null,
           Object.keys(data).map((key) => Number(key))
         ) + 1
-      const newData = createdData(data, item, newId)
+      const newData = recreateNoteWithAddingRow(data, item, newId)
       this.setState({ data: newData, activeId: newId })
     }
     if (e.which === 38) {
@@ -52,7 +56,7 @@ export default class NotePage extends Component {
     if (e.which === 46) {
       // delete
       if (item.content) return
-      this.setState({ data: deletedData(item, data) })
+      this.setState({ data: recreateNoteWithDeleteingRow(item, data) })
       // 下にフォーカス
       item.afterId && this.setState({ activeId: item.afterId })
     }
@@ -60,7 +64,7 @@ export default class NotePage extends Component {
       // backspace
       if (item.content) return
       e.preventDefault()
-      this.setState({ data: deletedData(item, data) })
+      this.setState({ data: recreateNoteWithDeleteingRow(item, data) })
       // 上にフォーカス
       this.setState({
         activeId: item.beforeId ? item.beforeId : item.afterId,
@@ -136,7 +140,7 @@ export default class NotePage extends Component {
     return (
       <>
         {!_.isEmpty(data) &&
-          createNoteArr(data).map((item) => {
+          convertNoteObjectToArray(data).map((item) => {
             return (
               <div
                 key={item.id}
